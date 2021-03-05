@@ -1,12 +1,24 @@
 import React, {useState} from 'react'
-import { StyleSheet, Text, View, TextInput, Image } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Image, Alert } from 'react-native'
 import { Button } from 'react-native-elements'
-
+import { firebase } from './firebase'
 
 function LoginPage({ navigation }) {
 
-    const [phone, setPhone] = useState('')
+    const [email, setEmail] = useState('')
     const [pw, setPw] = useState('')
+
+    const GotoHome = ()=> navigation.navigate('Home')
+ 
+    const SignIn = () => {
+
+      firebase.auth().signInWithEmailAndPassword(email, pw)
+      .then((userCredential) => {
+        var user = userCredential.user
+        GotoHome} 
+       ).catch ((err) => {Alert.alert("Oops! something is wrong, please try again", err.message)})
+
+    }
 
     return(
 
@@ -15,10 +27,10 @@ function LoginPage({ navigation }) {
       <Image style={{width:100,height:100,borderRadius:18,marginBottom:50}} source={require('./src/logo.png')}/>
       <View style={{ marginBottom: 10, width: "60%"}}>
        <TextInput 
-        placeholder="Your phone number"
+        placeholder="Account(Email)"
         placeholderTextColor="#636363"
-        onChangeText={text => setPhone(text)}
-        value={phone}
+        onChangeText={text => setEmail(text)}
+        value={email}
         style={styles.input}
        />
      </View>
@@ -35,14 +47,15 @@ function LoginPage({ navigation }) {
       <View style={{marginBottom:30,marginTop:50,width:'30%'}}>
        <Button
           title="Login"
-          onPress={() => navigation.navigate('Home')}
+          onPress={SignIn}
           buttonStyle={{backgroundColor:"#0080e8",borderRadius:25,height:50}}
         />
       </View>
-      <View style={{width:'40%'}}>
+      <View style={{width:'35%'}}>
         <Button
-          title="Go to register"
+          title="New User"
           onPress={() => navigation.navigate('Register')}
+          secureTextEntry={true}
           buttonStyle={{backgroundColor:"#0080e8",borderRadius:25,height:50}}
         />
        </View>
@@ -70,7 +83,7 @@ const styles = StyleSheet.create({
         height:50,
         borderBottomWidth: 1,
         fontSize:18,
-        outlineWidth: 0
+        //outlineWidth: 0
     },
 
 

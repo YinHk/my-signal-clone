@@ -7,6 +7,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import LoginPage from './LoginPage'
 import RegisterPage from './RegisterPage'
 import HomePage from './HomePage'
+import InfoPage from './InfoPage'
 
 const Stack = createStackNavigator()
 
@@ -20,8 +21,9 @@ export default function App() {
     }}>
        <Stack.Screen name="Login" component={LoginPage}  />
        <Stack.Screen name="Register" component={RegisterPage} />
+       <Stack.Screen name="Personal Information" component={InfoPage} />
        <Stack.Screen name="Home" component={HomePage}
-       options={{ title: 'Signal' }} />
+       options={{ title: 'Signal clone' }} />
     </Stack.Navigator>
    </NavigationContainer>
   )
