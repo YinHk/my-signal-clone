@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
-import { StyleSheet, Text, View, TextInput, Image, Alert } from 'react-native'
-import { Button } from 'react-native-elements'
+import { StyleSheet, Text, View, TextInput, 
+         Image, Alert, Button, Keyboard,
+         KeyboardAvoidingView, Platform,
+         TouchableWithoutFeedback } from 'react-native'
 import { firebase } from './firebase'
 
 function LoginPage({ navigation }) {
@@ -9,22 +11,34 @@ function LoginPage({ navigation }) {
     const [pw, setPw] = useState('')
 
     const GotoHome = ()=> navigation.navigate('Home')
- 
+    const GotoRister = () => navigation.navigate('Register')
+
     const SignIn = () => {
+
+     if(email!=''&&pw!=''){
 
       firebase.auth().signInWithEmailAndPassword(email, pw)
       .then((userCredential) => {
         var user = userCredential.user
-        GotoHome} 
-       ).catch ((err) => {Alert.alert("Oops! something is wrong, please try again", err.message)})
+        GotoHome()} 
+       ).catch ((err) => { Alert.alert("Oops! please try again", err.message)
+                           setEmail('')
+                           setPw('')
+                           })
+
+     }else Alert.alert("","Please fill in email and password")
 
     }
 
     return(
 
-     
+    <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+    > 
+     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-      <Image style={{width:100,height:100,borderRadius:18,marginBottom:50}} source={require('./src/logo.png')}/>
+      <Image style={{width:100,height:100,borderRadius:18,marginBottom:50}} source={require('./src/logo4.png')}/>
       <View style={{ marginBottom: 10, width: "60%"}}>
        <TextInput 
         placeholder="Account(Email)"
@@ -40,29 +54,25 @@ function LoginPage({ navigation }) {
         placeholderTextColor="#636363"
         onChangeText={text => setPw(text)}
         value={pw}
+        secureTextEntry={true}
         style={styles.input}
        />
      </View>
-
       <View style={{marginBottom:30,marginTop:50,width:'30%'}}>
        <Button
           title="Login"
           onPress={SignIn}
-          buttonStyle={{backgroundColor:"#0080e8",borderRadius:25,height:50}}
         />
       </View>
-      <View style={{width:'35%'}}>
+      <View style={{width:'30%'}}>
         <Button
-          title="New User"
-          onPress={() => navigation.navigate('Register')}
-          secureTextEntry={true}
-          buttonStyle={{backgroundColor:"#0080e8",borderRadius:25,height:50}}
+          title="Register"
+          onPress={GotoRister}
         />
        </View>
       </View>
-        
-        
-      
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>    
     )
 
 
@@ -82,8 +92,7 @@ const styles = StyleSheet.create({
     input: {
         height:50,
         borderBottomWidth: 1,
-        fontSize:18,
-        //outlineWidth: 0
+        fontSize:18  
     },
 
 
